@@ -1967,18 +1967,18 @@ void MetaD::update()
   std::vector<double> cv(ncv);
   for(unsigned i=0; i<ncv; ++i) cv[i] = getArgument(i);
 
-  if(cvhd){
+  if(cvhd) {
     bool isMax = false;
-    for(unsigned i=0; i<cv.size();++i){
+    for(unsigned i=0; i<cv.size(); ++i) {
       if(cv[i] >= 1.0) isMax=true;
       if(cv[i] >= 1.0-4*sigma0_[i]) nowAddAHill=false;
     }
-    if(isMax){
+    if(isMax) {
       cvhd_resetwait++;
     } else {
       cvhd_resetwait=0;
     }
-    if (cvhd_resetwait >= cvhd_resettime){
+    if (cvhd_resetwait >= cvhd_resettime) {
       hills_.clear();
       cvhd_event++;
       cvhd_resetwait=0;
@@ -1988,8 +1988,8 @@ void MetaD::update()
 
   //  double vbias=getBiasAndDerivatives(cv);
   // plumed master
-    double vbias=0.;
-    if(calc_work_) vbias=getBias(cv);
+  double vbias=0.;
+  if(calc_work_) vbias=getBias(cv);
 
 
   // if you use adaptive, call the FlexibleBin
