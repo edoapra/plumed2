@@ -26,7 +26,7 @@
 #include <string>
 #include <cmath>
 
-//using namespace std;
+using namespace std;
 
 namespace PLMD {
 namespace colvar {

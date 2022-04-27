@@ -24,7 +24,7 @@
 
 #include <cmath>
 
-//using namespace std;
+using namespace std;
 
 namespace PLMD {
 namespace function {
