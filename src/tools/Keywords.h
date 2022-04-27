@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2012-2020 The plumed team
+   Copyright (c) 2012-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -100,9 +100,9 @@ public:
 ///
   void isAnalysis() { isatoms=false; }
 /// find out whether flag key is on or off by default.
-  bool getLogicalDefault( std::string key, bool& def ) const ;
+  bool getLogicalDefault(const std::string & key, bool& def ) const ;
 /// Get the value of the default for the keyword named key
-  bool getDefaultValue( std::string key, std::string& def ) const ;
+  bool getDefaultValue(const std::string & key, std::string& def ) const ;
 /// Return the number of defined keywords
   unsigned size() const;
 /// Check if numbered keywords are allowed for this action
@@ -141,7 +141,7 @@ public:
   void print_html() const ;
 /// Print keywords in form readable by vim
   void print_vim() const ;
-/// Print the template version for the documenation
+/// Print the template version for the documentation
   void print_template( const std::string& actionname, bool include_optional) const ;
 /// Change the style of a keyword
   void reset_style( const std::string & k, const std::string & style );
@@ -161,10 +161,14 @@ public:
   void addOutputComponent( const std::string& name, const std::string& key, const std::string& descr );
 /// Has a component with this name been added?
   bool outputComponentExists( const std::string& name, const bool& custom ) const ;
+/// Get the description of this component
+  std::string getOutputComponentDescription( const std::string& name ) const ;
 /// Remove a component with a particular name from the keywords
   void removeComponent( const std::string& name );
 /// Reference to keys
   std::vector<std::string> getKeys() const { return keys; }
+/// Get the description of a particular keyword
+  std::string getTooltip( const std::string& name ) const ;
 };
 
 }

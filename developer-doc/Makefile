@@ -18,12 +18,12 @@ clean:
 coverage:
 	lcov -c -d ../src/ --output-file coverage.info
 # remove system headers:
-	lcov -r coverage.info "/opt/*" "/usr/*" -o coverage-full.info
+	lcov -r coverage.info "/opt/*" "/usr/*" "$(HOME)/opt/*" -o coverage-full.info
 # remove third-party libraries
-	lcov -o coverage.info -r coverage-full.info "*/blas/*" "*/lapack/*" "*/molfile/*" "*/lepton/*" "*/asmjit/*"
+	lcov -o coverage.info -r coverage-full.info "*/blas/*" "*/lapack/*" "*/molfile/*" "*/lepton/*" "*/asmjit/*" "*/xdrfile/*"
 # generate coverage
 	genhtml -o coverage -t "plumed test coverage" coverage.info
 # keep only third-party libraries
-	lcov -o coverage-libs.info -e coverage-full.info "*/blas/*" "*/lapack/*" "*/molfile/*" "*/lepton/*" "*/asmjit/*"
+	lcov -o coverage-libs.info -e coverage-full.info "*/blas/*" "*/lapack/*" "*/molfile/*" "*/lepton/*" "*/asmjit/*" "*/xdrfile/*"
 # generate coverage
 	genhtml -o coverage-libs -t "plumed test coverage (other modules)" coverage-libs.info

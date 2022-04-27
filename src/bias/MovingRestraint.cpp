@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2011-2020 The plumed team
+   Copyright (c) 2011-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -21,10 +21,6 @@
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 #include "Bias.h"
 #include "ActionRegister.h"
-
-
-using namespace std;
-
 
 namespace PLMD {
 namespace bias {
@@ -109,7 +105,7 @@ class MovingRestraint : public Bias {
   std::vector<double> oldk;
   std::vector<double> olddpotdk;
   std::vector<double> oldf;
-  std::vector<string> verse;
+  std::vector<std::string> verse;
   std::vector<double> work;
   double tot_work;
 public:
@@ -156,7 +152,7 @@ MovingRestraint::MovingRestraint(const ActionOptions&ao):
   verse(getNumberOfArguments())
 {
   parseVector("VERSE",verse);
-  vector<long int> ss(1); ss[0]=-1;
+  std::vector<long int> ss(1); ss[0]=-1;
   std::vector<double> kk( getNumberOfArguments() ), aa( getNumberOfArguments() );
   for(int i=0;; i++) {
     // Read in step
@@ -227,7 +223,7 @@ void MovingRestraint::calculate() {
     aa=at[step.size()-1];
   } else {
     unsigned i=0;
-    for(i=1; i<step.size(); i++) if(now<step[i]) break;
+    for(i=1; i<step.size()-1; i++) if(now<step[i]) break;
     double c2=(now-step[i-1])/double(step[i]-step[i-1]);
     double c1=1.0-c2;
     for(unsigned j=0; j<narg; j++) kk[j]=(c1*kappa[i-1][j]+c2*kappa[i][j]);
