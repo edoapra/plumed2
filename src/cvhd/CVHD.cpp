@@ -26,8 +26,8 @@
 
 using namespace std;
 
-namespace PLMD{
-namespace function{
+namespace PLMD {
+namespace function {
 
 //+PLUMEDOC FUNCTION CVHD
 /*
@@ -75,7 +75,7 @@ public:
 
 PLUMED_REGISTER_ACTION(CVHD,"CVHD")
 
-void CVHD::registerKeywords(Keywords& keys){
+void CVHD::registerKeywords(Keywords& keys) {
   Function::registerKeywords(keys);
   keys.use("ARG"); keys.use("PERIODIC");
   keys.add("compulsory","CUTOFF","1.0","the cutoff distance");
@@ -83,8 +83,8 @@ void CVHD::registerKeywords(Keywords& keys){
 }
 
 CVHD::CVHD(const ActionOptions&ao):
-Action(ao),
-Function(ao)
+  Action(ao),
+  Function(ao)
 {
   cutoff = 1.0;
   power = 1.0;
@@ -102,18 +102,18 @@ Function(ao)
   log.printf("\n");
 }
 
-void CVHD::calculate(){
+void CVHD::calculate() {
   const double pi = 3.141592653589793;
   const double cutoff2 = cutoff*cutoff;
   double combine = 0.0;
   double val, prefact, arg, pnorm;
-  for(unsigned i=0;i<getNumberOfArguments();++i){
+  for(unsigned i=0; i<getNumberOfArguments(); ++i) {
     double cv = getArgument(i);
     combine += pow(cv, power);
   };
   pnorm = pow(combine,2.0/power);
   arg = pnorm/cutoff2;
-  if(arg < 1.0 && arg > 0.0){
+  if(arg < 1.0 && arg > 0.0) {
     val = 0.5*(1.0-cos(pi*arg));
     prefact = pow(combine, 2.0/power-1.0)*pi*sin(pi*arg)/cutoff2;
   } else if (arg >= 1.0) {
@@ -123,7 +123,7 @@ void CVHD::calculate(){
     val = 0.0;
     prefact = 0.0;
   }
-  for(unsigned i=0;i<getNumberOfArguments();++i){
+  for(unsigned i=0; i<getNumberOfArguments(); ++i) {
     double cv = getArgument(i);
     setDerivative(i,prefact*pow(cv,power-1.0));
   };

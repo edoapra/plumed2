@@ -28,8 +28,8 @@
 
 using namespace std;
 
-namespace PLMD{
-namespace colvar{
+namespace PLMD {
+namespace colvar {
 
 //+PLUMEDOC COLVAR BONDDISTORTION
 /*
@@ -115,7 +115,7 @@ public:
 
 PLUMED_REGISTER_ACTION(GlobalDistortion,"GLOBALDISTORTION")
 
-void GlobalDistortion::registerKeywords(Keywords& keys){
+void GlobalDistortion::registerKeywords(Keywords& keys) {
   Colvar::registerKeywords(keys);
   keys.addFlag("RESET_REF",false,"Reset the computation by generating a new reference list, as specified by the RESET_MAXDIST and RESET_TIME keywords");
   keys.addFlag("USE_CUTOFF",false,"Use the REF_MIN and REF_MAX keywords to limited the number of contacts consider");
@@ -128,14 +128,14 @@ void GlobalDistortion::registerKeywords(Keywords& keys){
   keys.add("optional","RESET_MAXDIST","Maximal distortion before the reference list is reset (if RESET_BONDS is enabled)");
   keys.add("optional","RESET_TIME","Number of steps to wait before resetting the reference list");
   keys.add("optional","SWITCH","This keyword is used if you want to employ an alternative to the continuous swiching function defined above. "
-                               "The following provides information on the \\ref switchingfunction that are available.");
+           "The following provides information on the \\ref switchingfunction that are available.");
   keys.add("atoms","GROUPA","First list of atoms");
   keys.add("atoms","GROUPB","Second list of atoms (if empty, only contacts within GROUPA are considered)");
 }
 
 GlobalDistortion::GlobalDistortion(const ActionOptions&ao):
-PLUMED_COLVAR_INIT(ao),
-pbc(true)
+  PLUMED_COLVAR_INIT(ao),
+  pbc(true)
 {
   vector<AtomNumber> ga_lista, ga_listb;
   parseAtomList("GROUPA",ga_lista);
@@ -181,7 +181,7 @@ pbc(true)
   useSwitch = false;
   string sw,errors;
   parse("SWITCH",sw);
-  if(sw.length()>0){
+  if(sw.length()>0) {
     useSwitch = true;
     if( do_bondform ) error("it does not make sense to use DO_BONDFORM with SWITCH");
     switchingFunction.set(sw,errors);
@@ -190,14 +190,14 @@ pbc(true)
 
   log.printf("  between two groups of %u and %u atoms\n",static_cast<unsigned>(ga_lista.size()),static_cast<unsigned>(gb_lista.size()));
   log.printf("  first group:\n");
-  for(unsigned int i=0;i<ga_lista.size();++i){
-   if ( (i+1) % 25 == 0 ) log.printf("  \n");
-   log.printf("  %d", ga_lista[i].serial());
+  for(unsigned int i=0; i<ga_lista.size(); ++i) {
+    if ( (i+1) % 25 == 0 ) log.printf("  \n");
+    log.printf("  %d", ga_lista[i].serial());
   }
   log.printf("  \n  second group:\n");
-  for(unsigned int i=0;i<gb_lista.size();++i){
-   if ( (i+1) % 25 == 0 ) log.printf("  \n");
-   log.printf("  %d", gb_lista[i].serial());
+  for(unsigned int i=0; i<gb_lista.size(); ++i) {
+    if ( (i+1) % 25 == 0 ) log.printf("  \n");
+    log.printf("  %d", gb_lista[i].serial());
   }
   log.printf("  \n");
   if(pbc) log.printf("  using periodic boundary conditions\n");
@@ -210,7 +210,7 @@ pbc(true)
 
 
 // calculator
-void GlobalDistortion::calculate(){
+void GlobalDistortion::calculate() {
   if (reBuildReflist) buildReflist();
 
   int k = 0;
@@ -222,22 +222,22 @@ void GlobalDistortion::calculate(){
   Tensor virial;
 
   if(!twogroups) {
-    for(unsigned i = 0; i < num_a; i++){
-      for(unsigned j = i+1; j < num_a; j++){
+    for(unsigned i = 0; i < num_a; i++) {
+      for(unsigned j = i+1; j < num_a; j++) {
         if(checklist[k]) pairsum += pairterm(i, j, reflist[k], deriv, virial);
         k++;
       }
     }
   } else {
-    for(unsigned i = 0; i < num_a; i++){
-      for(unsigned j = num_a; j < num_b; j++){
+    for(unsigned i = 0; i < num_a; i++) {
+      for(unsigned j = num_a; j < num_b; j++) {
         if(checklist[k]) pairsum += pairterm(i, j, reflist[k], deriv, virial);
         k++;
       }
     }
   }
 
-  if (pairsum != 0.0){
+  if (pairsum != 0.0) {
     value = pow(pairsum, 1.0/power);
     prefactor = pow(pairsum, 1.0/power-1.0);
   } else {
@@ -247,28 +247,28 @@ void GlobalDistortion::calculate(){
 
   // bookkeeping. if we've exceeded our distortion limit, prepare for rebuild next time
   unsigned currstep = getStep();
-  if(reset_ref){
+  if(reset_ref) {
     if(value < reset_maxdist) reset_wait=currstep;
-    if(currstep-reset_wait >= reset_time){
+    if(currstep-reset_wait >= reset_time) {
       reset_wait = currstep;
       reBuildReflist = true;
     }
   }
 
   // neigbour list stuff. should be used when using full connectivity matrix in a large system
-  if(nl_stride>0 && currstep-nl_wait>=nl_stride){
-    if(!(reset_ref && value>=reset_maxdist)){
+  if(nl_stride>0 && currstep-nl_wait>=nl_stride) {
+    if(!(reset_ref && value>=reset_maxdist)) {
       buildNeigbourlist();
       nl_wait=currstep;
     }
   }
 
-  for(unsigned i=0;i<deriv.size();++i) setAtomsDerivatives(i,deriv[i]*prefactor);
+  for(unsigned i=0; i<deriv.size(); ++i) setAtomsDerivatives(i,deriv[i]*prefactor);
   setBoxDerivatives  (virial*prefactor);
   setValue           (value);
 }
 
-void GlobalDistortion::buildReflist(){
+void GlobalDistortion::buildReflist() {
   reBuildReflist = false;
   reflist.clear();
   checklist.clear();
@@ -278,9 +278,9 @@ void GlobalDistortion::buildReflist(){
   bool consider;
 
   if(!twogroups) {
-    for(unsigned i = 0; i < num_a; i++){
-      for(unsigned j = i+1; j < num_a; j++){
-        if(pbc){
+    for(unsigned i = 0; i < num_a; i++) {
+      for(unsigned j = i+1; j < num_a; j++) {
+        if(pbc) {
           distance = pbcDistance(getPosition(i),getPosition(j));
         } else {
           distance = delta(getPosition(i),getPosition(j));
@@ -294,9 +294,9 @@ void GlobalDistortion::buildReflist(){
       }
     }
   } else {
-    for(unsigned i = 0; i < num_a; i++){
-      for(unsigned j = num_a; j < num_b; j++){
-        if(pbc){
+    for(unsigned i = 0; i < num_a; i++) {
+      for(unsigned j = num_a; j < num_b; j++) {
+        if(pbc) {
           distance = pbcDistance(getPosition(i),getPosition(j));
         } else {
           distance = delta(getPosition(i),getPosition(j));
@@ -312,7 +312,7 @@ void GlobalDistortion::buildReflist(){
   }
 }
 
-void GlobalDistortion::buildNeigbourlist(){
+void GlobalDistortion::buildNeigbourlist() {
   checklist.clear();
 
   Vector distance;
@@ -320,9 +320,9 @@ void GlobalDistortion::buildNeigbourlist(){
   bool consider;
 
   if(!twogroups) {
-    for(unsigned i = 0; i < num_a; i++){
-      for(unsigned j = i+1; j < num_a; j++){
-        if(pbc){
+    for(unsigned i = 0; i < num_a; i++) {
+      for(unsigned j = i+1; j < num_a; j++) {
+        if(pbc) {
           distance = pbcDistance(getPosition(i),getPosition(j));
         } else {
           distance = delta(getPosition(i),getPosition(j));
@@ -335,9 +335,9 @@ void GlobalDistortion::buildNeigbourlist(){
       }
     }
   } else {
-    for(unsigned i = 0; i < num_a; i++){
-      for(unsigned j = num_a; j < num_b; j++){
-        if(pbc){
+    for(unsigned i = 0; i < num_a; i++) {
+      for(unsigned j = num_a; j < num_b; j++) {
+        if(pbc) {
           distance = pbcDistance(getPosition(i),getPosition(j));
         } else {
           distance = delta(getPosition(i),getPosition(j));
@@ -352,14 +352,15 @@ void GlobalDistortion::buildNeigbourlist(){
   }
 }
 
-double GlobalDistortion::getRefval(double val){
+double GlobalDistortion::getRefval(double val) {
   if (useSwitch) {
     return ref_val*round(val/ref_val);
-  } else { return ref_val;
+  } else {
+    return ref_val;
   }
 }
 
-double GlobalDistortion::pairterm(unsigned i, unsigned j, double ref, vector<Vector>& der, Tensor& virial){
+double GlobalDistortion::pairterm(unsigned i, unsigned j, double ref, vector<Vector>& der, Tensor& virial) {
   double r;
   double stretch;
   double val;
@@ -367,7 +368,7 @@ double GlobalDistortion::pairterm(unsigned i, unsigned j, double ref, vector<Vec
   Vector distance;
   Vector dval;
 
-  if(pbc){
+  if(pbc) {
     distance=pbcDistance(getPosition(i),getPosition(j));
   } else {
     distance=delta(getPosition(i),getPosition(j));
