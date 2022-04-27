@@ -31,7 +31,7 @@
 namespace PLMD {
 namespace colvar {
 
-//+PLUMEDOC COLVAR BONDDISTORTION
+//+PLUMEDOC COLVAR GLOBALDISTORTION
 /*
 Calculate the global bond distortion
 
@@ -65,7 +65,7 @@ where the RMIN and RCUT values are the arithmetic mean of the GROUPA and GROUPB 
 would be an RMIN of 0.11 nm and and RCUT of 0.14 nm). If, however, you wish to use other values for these
 cross-terms (or ignore them altogether), you can use the RMINAB and RCUTAB keywords.
 \verbatim
-BONDDISTORTION GROUPA=1-20 GROUPB=21-60 P=8 RMINA=0.15 RCUTA=0.18 RMINB=0.07 RCUTB=0.1 LABEL=ch
+GLOBALDISTORTION GROUPA=1-20 GROUPB=21-60 P=8 RMINA=0.15 RCUTA=0.18 RMINB=0.07 RCUTB=0.1 LABEL=ch
 PRINT ARG=ch STRIDE=1
 \endverbatim
 (See also \ref PRINT)
@@ -73,7 +73,7 @@ PRINT ARG=ch STRIDE=1
 It is not mandatory to use two groups. For instance, if we're only interested in the atoms 1-20 of the
 previous example, an input could look like this:
 \verbatim
-BONDDISTORTION GROUPA=1-20 P=8 RMINA=0.15 RCUTA=0.18 LABEL=cc
+GLOBALDISTORTION GROUPA=1-20 P=8 RMINA=0.15 RCUTA=0.18 LABEL=cc
 \endverbatim
 
 Further expanding on the previous example, if the CV value remains above 0.4 for 1000 simulation steps, we
@@ -81,7 +81,7 @@ instruct plumed to reset and generate a new reference list of bonds. Please note
 correspond to 1000 steps at which the CV is actually calculated: if no bias (such as the CVHD method) is
 applied, the CV is only calculated when it is printed.
 \verbatim
-BONDDISTORTION GROUPA=1-20 P=8 RMINA=0.15 RCUTA=0.18 RESET_BONDS RESET_MAXDIST=0.4 RESET_TIME=1000 LABEL=cc
+GLOBALDISTORTION GROUPA=1-20 P=8 RMINA=0.15 RCUTA=0.18 RESET_BONDS RESET_MAXDIST=0.4 RESET_TIME=1000 LABEL=cc
 \endverbatim
 
 */
