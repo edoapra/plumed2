@@ -24,10 +24,10 @@
 
 #include <cmath>
 
-using namespace std;
 
 namespace PLMD {
 namespace function {
+namespace cvhd {
 
 //+PLUMEDOC FUNCTION CVHD
 /*
@@ -130,5 +130,6 @@ void CVHD::calculate() {
   setValue(val);
 }
 
+}
 }
 }

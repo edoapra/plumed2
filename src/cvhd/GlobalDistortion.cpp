@@ -26,10 +26,10 @@
 #include <string>
 #include <cmath>
 
-using namespace std;
 
 namespace PLMD {
 namespace colvar {
+namespace cvhd {
 
 //+PLUMEDOC COLVAR GLOBALDISTORTION
 /*
@@ -98,14 +98,14 @@ class GlobalDistortion : public Colvar {
   unsigned nl_stride, nl_wait;
   unsigned num_a, num_b;
   SwitchingFunction switchingFunction;
-  vector<AtomNumber> ga_lista, gb_lista;
+  std::vector<AtomNumber> ga_lista, gb_lista;
   std::vector<AtomNumber> fullatomlist;
-  vector<double> reflist;
-  vector<bool> checklist;
+  std::vector<double> reflist;
+  std::vector<bool> checklist;
   void buildReflist();
   void buildNeigbourlist();
   double getRefval(double val);
-  double pairterm(unsigned i, unsigned j, double ref, vector<Vector>& der, Tensor& viral);
+  double pairterm(unsigned i, unsigned j, double ref, std::vector<Vector>& der, Tensor& viral);
 public:
   explicit GlobalDistortion(const ActionOptions&);
 // active methods:
@@ -137,7 +137,7 @@ GlobalDistortion::GlobalDistortion(const ActionOptions&ao):
   PLUMED_COLVAR_INIT(ao),
   pbc(true)
 {
-  vector<AtomNumber> ga_lista, ga_listb;
+  std::vector<AtomNumber> ga_lista, ga_listb;
   parseAtomList("GROUPA",ga_lista);
   parseAtomList("GROUPB",gb_lista);
 
@@ -179,7 +179,7 @@ GlobalDistortion::GlobalDistortion(const ActionOptions&ao):
   parseFlag("DO_BONDFORM",do_bondform);
 
   useSwitch = false;
-  string sw,errors;
+  std::string sw,errors;
   parse("SWITCH",sw);
   if(sw.length()>0) {
     useSwitch = true;
@@ -218,7 +218,7 @@ void GlobalDistortion::calculate() {
   double prefactor;
   double value;
   Vector distance;
-  vector<Vector> deriv(getNumberOfAtoms());
+  std::vector<Vector> deriv(getNumberOfAtoms());
   Tensor virial;
 
   if(!twogroups) {
@@ -360,7 +360,7 @@ double GlobalDistortion::getRefval(double val) {
   }
 }
 
-double GlobalDistortion::pairterm(unsigned i, unsigned j, double ref, vector<Vector>& der, Tensor& virial) {
+double GlobalDistortion::pairterm(unsigned i, unsigned j, double ref, std::vector<Vector>& der, Tensor& virial) {
   double r;
   double stretch;
   double val;
@@ -392,5 +392,6 @@ double GlobalDistortion::pairterm(unsigned i, unsigned j, double ref, vector<Vec
   return val;
 }
 
+}
 }
 }
