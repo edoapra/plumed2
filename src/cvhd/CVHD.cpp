@@ -57,6 +57,21 @@ explicitly. Use PERIODIC=NO if the resulting variable is not periodic,
 and PERIODIC=A,B where A and B are the two boundaries if the resulting variable
 is periodic.
 
+\par Examples
+
+The following provide an example to bias two different bond types (say, C–H and C–C) using
+a single clamped CVHD CV.
+
+\plumedfile
+CVHD ...
+LABEL=cv
+ARG=cc,ch
+P=8
+CUTOFF=0.5
+PERIODIC=NO
+... CVHD
+\endplumedfile
+
 */
 //+ENDPLUMEDOC
 
