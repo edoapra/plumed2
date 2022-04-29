@@ -271,6 +271,7 @@ PLUMED_CONFIG_ENABLE([asmjit],[enable embedded asmjit],[yes])
 PLUMED_CONFIG_ENABLE([mpi],[search for mpi],[yes])
 PLUMED_CONFIG_ENABLE([external-lapack],[search for external lapack],[yes])
 PLUMED_CONFIG_ENABLE([external-blas],[search for external blas],[yes])
+PLUMED_CONFIG_ENABLE([ilp64],[enable ilp64 for blas/lapack],[no])
 PLUMED_CONFIG_ENABLE([molfile-plugins],[use molfile_plugins],[yes])
 PLUMED_CONFIG_ENABLE([external-molfile-plugins],[search for external molfile_plugins],[yes])
 PLUMED_CONFIG_ENABLE([zlib],[search for zlib],[yes])
@@ -571,26 +572,35 @@ then
   AC_DEFINE([F77_NO_UNDERSCORE])
 fi
 
+#### ILP64 for blas/lapack ####
+if test $ilp64 == true ; then
+AC_DEFINE([__PLUMED_HAS_ILP64])
+fi
 if test -n "$blas_found" ; then
 
+if test $ilp64 == true ; then
+integer=long
+else
+integer=int
+fi
 AC_DEFUN([PLUMED_TEST_SDOT],[
 #if ! defined(F77_NO_UNDERSCORE)
 #define sdot sdot_
 #endif
 extern "C"{
-$1 sdot(int *n, float *dx, int *incx, float *dy, int *incy);
+$1 sdot($2 *n, float *dx, $2 *incx, float *dy, $2 *incy);
 }
 
 int main(){
-  int size=5;
+  $2 size=5;
 // notice that [[]] is required to cheat autoconf
   float af[[5]],bf[[5]];
   for(unsigned i=0;i<size;i++){
     af[[i]]=size;
     bf[[i]]=size-i;
   }
-  int inca=1;
-  int incb=1;
+  $2 inca=1;
+  $2 incb=1;
   $1 f=sdot(&size,af,&inca,bf,&incb)-75;
   if(f*f<1e-10) return 0;
   else return 1;
@@ -599,22 +609,36 @@ int main(){
 
 
 AC_MSG_CHECKING([whether sdot returns float])
-AC_RUN_IFELSE([AC_LANG_SOURCE([PLUMED_TEST_SDOT([float])])],
+if test $ilp64 == true ; then
+AC_RUN_IFELSE([AC_LANG_SOURCE([PLUMED_TEST_SDOT([float],[long])])],
   [ sdot_returns_float=yes ; AC_MSG_RESULT([yes]) ],
   [ sdot_returns_float=no ;  AC_MSG_RESULT([no]) ],
   [ AC_MSG_RESULT([not checked (cross compiling)]) ]
 )
-
+else
+AC_RUN_IFELSE([AC_LANG_SOURCE([PLUMED_TEST_SDOT([float],[int])])],
+  [ sdot_returns_float=yes ; AC_MSG_RESULT([yes]) ],
+  [ sdot_returns_float=no ;  AC_MSG_RESULT([no]) ],
+  [ AC_MSG_RESULT([not checked (cross compiling)]) ]
+)
+fi
 if test "$sdot_returns_float" == no ;
 then
 
 AC_MSG_CHECKING([whether sdot returns double])
-AC_RUN_IFELSE([AC_LANG_SOURCE([PLUMED_TEST_SDOT([double])])],
+if test $ilp64 == true ; then
+AC_RUN_IFELSE([AC_LANG_SOURCE([PLUMED_TEST_SDOT([double],[long])])],
   [ sdot_returns_double=yes ; AC_MSG_RESULT([yes]) ],
   [ sdot_returns_double=no ;  AC_MSG_RESULT([no]) ],
   [ AC_MSG_RESULT([not checked (cross compiling)]) ]
 )
-
+else
+AC_RUN_IFELSE([AC_LANG_SOURCE([PLUMED_TEST_SDOT([double],[int])])],
+  [ sdot_returns_double=yes ; AC_MSG_RESULT([yes]) ],
+  [ sdot_returns_double=no ;  AC_MSG_RESULT([no]) ],
+  [ AC_MSG_RESULT([not checked (cross compiling)]) ]
+)
+fi
 fi
 
 if test "$sdot_returns_double" = yes ; then
@@ -632,7 +656,6 @@ fi
 fi
 
 fi
-
 #### End of compulsory libraries ####
 
 #### Optional libraries ####

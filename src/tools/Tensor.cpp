@@ -26,11 +26,11 @@
 
 namespace PLMD {
 
-void TensorGenericAux::local_dsyevr(const char *jobz, const char *range, const char *uplo, int *n,
-                                    double *a, int *lda, double *vl, double *vu, int *
-                                    il, int *iu, double *abstol, int *m, double *w,
-                                    double *z__, int *ldz, int *isuppz, double *work,
-                                    int *lwork, int *iwork, int *liwork, int *info) {
+void TensorGenericAux::local_dsyevr(const char *jobz, const char *range, const char *uplo, Integer *n,
+                                    double *a, Integer *lda, double *vl, double *vu, Integer *
+                                    il, Integer *iu, double *abstol, Integer *m, double *w,
+                                    double *z__, Integer *ldz, Integer *isuppz, double *work,
+                                    Integer *lwork, Integer *iwork, Integer *liwork, Integer *info) {
   plumed_lapack_dsyevr(jobz,range,uplo,n,a,lda,vl,vu,il,iu,abstol,m,w,z__,ldz,isuppz,work,lwork,iwork,liwork,info);
 }
 

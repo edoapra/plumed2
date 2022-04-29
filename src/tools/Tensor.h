@@ -21,6 +21,11 @@
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 #ifndef __PLUMED_tools_Tensor_h
 #define __PLUMED_tools_Tensor_h
+#ifdef __PLUMED_HAS_ILP64
+#define Integer long
+#else
+#define Integer int
+#endif
 
 #include "MatrixSquareBracketsAccess.h"
 #include "Vector.h"
@@ -36,11 +41,11 @@ namespace PLMD {
 class TensorGenericAux {
 public:
 // local redefinition, just to avoid including lapack.h here
-  static void local_dsyevr(const char *jobz, const char *range, const char *uplo, int *n,
-                           double *a, int *lda, double *vl, double *vu, int *
-                           il, int *iu, double *abstol, int *m, double *w,
-                           double *z__, int *ldz, int *isuppz, double *work,
-                           int *lwork, int *iwork, int *liwork, int *info);
+  static void local_dsyevr(const char *jobz, const char *range, const char *uplo, Integer *n,
+                           double *a, Integer *lda, double *vl, double *vu, Integer *
+                           il, Integer *iu, double *abstol, Integer *m, double *w,
+                           double *z__, Integer *ldz, Integer *isuppz, double *work,
+                           Integer *lwork, Integer *iwork, Integer *liwork, Integer *info);
 };
 
 /**
@@ -532,17 +537,17 @@ void diagMatSym(const TensorGeneric<n,n>&mat,VectorGeneric<m>&evals,TensorGeneri
   // I put some likely exaggerated number
   constexpr int bs=100;
   // temporary data, on stack so as to avoid allocations
-  std::array<int,10*n> iwork;
+  std::array<Integer,10*n> iwork;
   std::array<double,(6+bs)*n> work;
-  std::array<int,2*m> isup;
-  int nn=n;              // dimension of matrix
+  std::array<Integer,2*m> isup;
+  Integer nn=n;              // dimension of matrix
   double vl=0.0, vu=1.0; // ranges - not used
-  int one=1,mm=m;        // minimum and maximum index
+  Integer one=1,mm=m;        // minimum and maximum index
   double abstol=0.0;     // tolerance
-  int mout=0;            // number of eigenvalues found (same as mm)
-  int info=0;            // result
-  int liwork=iwork.size();
-  int lwork=work.size();
+  Integer mout=0;            // number of eigenvalues found (same as mm)
+  Integer info=0;            // result
+  Integer liwork=iwork.size();
+  Integer lwork=work.size();
   TensorGenericAux::local_dsyevr("V", (n==m?"A":"I"), "U", &nn, const_cast<double*>(&mat[0][0]), &nn, &vl, &vu, &one, &mm,
                                  &abstol, &mout, &evals[0], &evec[0][0], &nn,
                                  isup.data(), work.data(), &lwork, iwork.data(), &liwork, &info);

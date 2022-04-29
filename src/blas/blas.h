@@ -91,6 +91,11 @@ Erik Lindahl, 2008-10-07.
 #ifndef __PLUMED_BLAS_RETURNS_FLOAT
 #define __PLUMED_BLAS_RETURNS_FLOAT float
 #endif
+#ifdef __PLUMED_HAS_ILP64
+#define Integer long
+#else
+#define Integer int
+#endif
 #if ! defined (__PLUMED_HAS_EXTERNAL_BLAS)
 #include "def_internal.h"
 namespace PLMD{
@@ -109,137 +114,137 @@ extern "C"{
 
 /* Double precision versions */
 double
-    PLUMED_BLAS_F77_FUNC(dasum, DASUM) (int *n, double *dx, int *incx);
+    PLUMED_BLAS_F77_FUNC(dasum, DASUM) (Integer *n, double *dx, Integer *incx);
 
 void
-    PLUMED_BLAS_F77_FUNC(daxpy, DAXPY) (int *n, double *da, double *dx, int *incx, double *dy, int *incy);
+    PLUMED_BLAS_F77_FUNC(daxpy, DAXPY) (Integer *n, double *da, double *dx, Integer *incx, double *dy, Integer *incy);
 
 void
-    PLUMED_BLAS_F77_FUNC(dcopy, DCOPY) (int *n, double *dx, int *incx, double *dy, int *incy);
+    PLUMED_BLAS_F77_FUNC(dcopy, DCOPY) (Integer *n, double *dx, Integer *incx, double *dy, Integer *incy);
 
 double
-    PLUMED_BLAS_F77_FUNC(ddot, DDOT) (int *n, double *dx, int *incx, double *dy, int *incy);
+    PLUMED_BLAS_F77_FUNC(ddot, DDOT) (Integer *n, double *dx, Integer *incx, double *dy, Integer *incy);
 
 void
-    PLUMED_BLAS_F77_FUNC(dgemm, DGEMM) (const char *transa, const char *transb, int *m, int *n, int *k,
-                            double *alpha, double *a, int *lda, double *b, int *ldb,
-                            double *beta, double *c, int *ldc);
+    PLUMED_BLAS_F77_FUNC(dgemm, DGEMM) (const char *transa, const char *transb, Integer *m, Integer *n, Integer *k,
+                            double *alpha, double *a, Integer *lda, double *b, Integer *ldb,
+                            double *beta, double *c, Integer *ldc);
 
 void
-    PLUMED_BLAS_F77_FUNC(dgemv, DGEMV) (const char *trans, int *m, int *n, double *alpha, double *a, int *lda,
-                            double *x, int *incx, double *beta, double *y, int *incy);
+    PLUMED_BLAS_F77_FUNC(dgemv, DGEMV) (const char *trans, Integer *m, Integer *n, double *alpha, double *a, Integer *lda,
+                            double *x, Integer *incx, double *beta, double *y, Integer *incy);
 
 void
-    PLUMED_BLAS_F77_FUNC(dger, DGER) (int *m, int *n, double *alpha, double *x, int *incx,
-                          double *y, int *incy, double *a, int *lda);
+    PLUMED_BLAS_F77_FUNC(dger, DGER) (Integer *m, Integer *n, double *alpha, double *x, Integer *incx,
+                          double *y, Integer *incy, double *a, Integer *lda);
 
 double
-    PLUMED_BLAS_F77_FUNC(dnrm2, DNRM2) (int  *n, double *x, int *incx);
+    PLUMED_BLAS_F77_FUNC(dnrm2, DNRM2) (Integer  *n, double *x, Integer *incx);
 
 void
-    PLUMED_BLAS_F77_FUNC(drot, DROT) (int *n, double *dx, int *incx,
-                          double *dy, int *incy, double *c, double *s);
+    PLUMED_BLAS_F77_FUNC(drot, DROT) (Integer *n, double *dx, Integer *incx,
+                          double *dy, Integer *incy, double *c, double *s);
 
 void
-    PLUMED_BLAS_F77_FUNC(dscal, DSCAL) (int *n, double *fact, double *dx, int *incx);
+    PLUMED_BLAS_F77_FUNC(dscal, DSCAL) (Integer *n, double *fact, double *dx, Integer *incx);
 
 void
-    PLUMED_BLAS_F77_FUNC(dswap, DSWAP) (int *n, double *dx, int *incx, double *dy, int *incy);
+    PLUMED_BLAS_F77_FUNC(dswap, DSWAP) (Integer *n, double *dx, Integer *incx, double *dy, Integer *incy);
 
 void
-    PLUMED_BLAS_F77_FUNC(dsymv, DSYMV) (const char *uplo, int *n, double *alpha, double *a, int *lda,
-                            double *x, int *incx, double *beta, double *y, int *incy);
+    PLUMED_BLAS_F77_FUNC(dsymv, DSYMV) (const char *uplo, Integer *n, double *alpha, double *a, Integer *lda,
+                            double *x, Integer *incx, double *beta, double *y, Integer *incy);
 
 void
-    PLUMED_BLAS_F77_FUNC(dsyr2, DSYR2) (const char *uplo, int *n, double *alpha, double *x, int *incx,
-                            double *y, int *incy, double *a, int *lda);
+    PLUMED_BLAS_F77_FUNC(dsyr2, DSYR2) (const char *uplo, Integer *n, double *alpha, double *x, Integer *incx,
+                            double *y, Integer *incy, double *a, Integer *lda);
 
 void
-    PLUMED_BLAS_F77_FUNC(dsyr2k, DSYR2K) (const char *uplo, const char *trans, int *n, int *k, double *alpha, double *a,
-                              int *lda, double *b, int *ldb, double *beta, double *c, int *ldc);
+    PLUMED_BLAS_F77_FUNC(dsyr2k, DSYR2K) (const char *uplo, const char *trans, Integer *n, Integer *k, double *alpha, double *a,
+                              Integer *lda, double *b, Integer *ldb, double *beta, double *c, Integer *ldc);
 
 void
-    PLUMED_BLAS_F77_FUNC(dtrmm, DTRMM) (const char *side, const char *uplo, const char *transa, const char *diag, int *m, int *n,
-                            double *alpha, double *a, int *lda, double *b, int *ldb);
+    PLUMED_BLAS_F77_FUNC(dtrmm, DTRMM) (const char *side, const char *uplo, const char *transa, const char *diag, Integer *m, Integer *n,
+                            double *alpha, double *a, Integer *lda, double *b, Integer *ldb);
 
 void
-    PLUMED_BLAS_F77_FUNC(dtrmv, DTRMV) (const char *uplo, const char *trans, const char *diag, int *n,
-                            double *a, int *lda, double *x, int *incx);
+    PLUMED_BLAS_F77_FUNC(dtrmv, DTRMV) (const char *uplo, const char *trans, const char *diag, Integer *n,
+                            double *a, Integer *lda, double *x, Integer *incx);
 
 void
-    PLUMED_BLAS_F77_FUNC(dtrsm, DTRSM) (const char *side, const char *uplo, const char *transa, const char *diag, int *m, int *n,
-                            double *alpha, double *a, int *lda, double *b, int *ldb);
+    PLUMED_BLAS_F77_FUNC(dtrsm, DTRSM) (const char *side, const char *uplo, const char *transa, const char *diag, Integer *m, Integer *n,
+                            double *alpha, double *a, Integer *lda, double *b, Integer *ldb);
 
-int
-    PLUMED_BLAS_F77_FUNC(idamax, IDAMAX) (int *n, double *dx, int *incx);
+Integer
+    PLUMED_BLAS_F77_FUNC(idamax, IDAMAX) (Integer *n, double *dx, Integer *incx);
 
 
 
 /* Single precision versions */
 __PLUMED_BLAS_RETURNS_FLOAT
-    PLUMED_BLAS_F77_FUNC(sasum, SASUM) (int *n, float *dx, int *incx);
+    PLUMED_BLAS_F77_FUNC(sasum, SASUM) (Integer *n, float *dx, Integer *incx);
 
 void
-    PLUMED_BLAS_F77_FUNC(saxpy, SAXPY) (int *n, float *da, float *dx, int *incx, float *dy, int *incy);
+    PLUMED_BLAS_F77_FUNC(saxpy, SAXPY) (Integer *n, float *da, float *dx, Integer *incx, float *dy, Integer *incy);
 
 void
-    PLUMED_BLAS_F77_FUNC(scopy, SCOPY) (int *n, float *dx, int *incx, float *dy, int *incy);
+    PLUMED_BLAS_F77_FUNC(scopy, SCOPY) (Integer *n, float *dx, Integer *incx, float *dy, Integer *incy);
 
 __PLUMED_BLAS_RETURNS_FLOAT
-    PLUMED_BLAS_F77_FUNC(sdot, SDOT) (int *n, float *dx, int *incx, float *dy, int *incy);
+    PLUMED_BLAS_F77_FUNC(sdot, SDOT) (Integer *n, float *dx, Integer *incx, float *dy, Integer *incy);
 
 void
-    PLUMED_BLAS_F77_FUNC(sgemm, SGEMM) (const char *transa, const char *transb, int *m, int *n, int *k,
-                            float *alpha, float *a, int *lda, float *b, int *ldb,
-                            float *beta, float *c, int *ldc);
+    PLUMED_BLAS_F77_FUNC(sgemm, SGEMM) (const char *transa, const char *transb, Integer *m, Integer *n, Integer *k,
+                            float *alpha, float *a, Integer *lda, float *b, Integer *ldb,
+                            float *beta, float *c, Integer *ldc);
 
 void
-    PLUMED_BLAS_F77_FUNC(sgemv, SGEMV) (const char *trans, int *m, int *n, float *alpha, float *a, int *lda,
-                            float *x, int *incx, float *beta, float *y, int *incy);
+    PLUMED_BLAS_F77_FUNC(sgemv, SGEMV) (const char *trans, Integer *m, Integer *n, float *alpha, float *a, Integer *lda,
+                            float *x, Integer *incx, float *beta, float *y, Integer *incy);
 
 void
-    PLUMED_BLAS_F77_FUNC(sger, SGER) (int *m, int *n, float *alpha, float *x, int *incx,
-                          float *y, int *incy, float *a, int *lda);
+    PLUMED_BLAS_F77_FUNC(sger, SGER) (Integer *m, Integer *n, float *alpha, float *x, Integer *incx,
+                          float *y, Integer *incy, float *a, Integer *lda);
 
 __PLUMED_BLAS_RETURNS_FLOAT
-    PLUMED_BLAS_F77_FUNC(snrm2, SNRM2) (int  *n, float *x, int *incx);
+    PLUMED_BLAS_F77_FUNC(snrm2, SNRM2) (Integer  *n, float *x, Integer *incx);
 
 void
-    PLUMED_BLAS_F77_FUNC(srot, SROT) (int *n, float *dx, int *incx,
-                          float *dy, int *incy, float *c, float *s);
+    PLUMED_BLAS_F77_FUNC(srot, SROT) (Integer *n, float *dx, Integer *incx,
+                          float *dy, Integer *incy, float *c, float *s);
 
 void
-    PLUMED_BLAS_F77_FUNC(sscal, SSCAL) (int *n, float *fact, float *dx, int *incx);
+    PLUMED_BLAS_F77_FUNC(sscal, SSCAL) (Integer *n, float *fact, float *dx, Integer *incx);
 
 void
-    PLUMED_BLAS_F77_FUNC(sswap, SSWAP) (int *n, float *dx, int *incx, float *dy, int *incy);
+    PLUMED_BLAS_F77_FUNC(sswap, SSWAP) (Integer *n, float *dx, Integer *incx, float *dy, Integer *incy);
 
 void
-    PLUMED_BLAS_F77_FUNC(ssymv, SSYMV) (const char *uplo, int *n, float *alpha, float *a, int *lda,
-                            float *x, int *incx, float *beta, float *y, int *incy);
+    PLUMED_BLAS_F77_FUNC(ssymv, SSYMV) (const char *uplo, Integer *n, float *alpha, float *a, Integer *lda,
+                            float *x, Integer *incx, float *beta, float *y, Integer *incy);
 
 void
-    PLUMED_BLAS_F77_FUNC(ssyr2, SSYR2) (const char *uplo, int *n, float *alpha, float *x, int *incx,
-                            float *y, int *incy, float *a, int *lda);
+    PLUMED_BLAS_F77_FUNC(ssyr2, SSYR2) (const char *uplo, Integer *n, float *alpha, float *x, Integer *incx,
+                            float *y, Integer *incy, float *a, Integer *lda);
 
 void
-    PLUMED_BLAS_F77_FUNC(ssyr2k, SSYR2K) (const char *uplo, const char *trans, int *n, int *k, float *alpha, float *a,
-                              int *lda, float *b, int *ldb, float *beta, float *c, int *ldc);
+    PLUMED_BLAS_F77_FUNC(ssyr2k, SSYR2K) (const char *uplo, const char *trans, Integer *n, Integer *k, float *alpha, float *a,
+                              Integer *lda, float *b, Integer *ldb, float *beta, float *c, Integer *ldc);
 
 void
-    PLUMED_BLAS_F77_FUNC(strmm, STRMM) (const char *side, const char *uplo, const char *transa, const char *diag, int *m, int *n,
-                            float *alpha, float *a, int *lda, float *b, int *ldb);
+    PLUMED_BLAS_F77_FUNC(strmm, STRMM) (const char *side, const char *uplo, const char *transa, const char *diag, Integer *m, Integer *n,
+                            float *alpha, float *a, Integer *lda, float *b, Integer *ldb);
 
 void
-    PLUMED_BLAS_F77_FUNC(strmv, STRMV) (const char *uplo, const char *trans, const char *diag, int *n,
-                            float *a, int *lda, float *x, int *incx);
+    PLUMED_BLAS_F77_FUNC(strmv, STRMV) (const char *uplo, const char *trans, const char *diag, Integer *n,
+                            float *a, Integer *lda, float *x, Integer *incx);
 
 void
-    PLUMED_BLAS_F77_FUNC(strsm, STRSM) (const char *side, const char *uplo, const char *transa, const char *diag, int *m, int *n,
-                            float *alpha, float *a, int *lda, float *b, int *ldb);
+    PLUMED_BLAS_F77_FUNC(strsm, STRSM) (const char *side, const char *uplo, const char *transa, const char *diag, Integer *m, Integer *n,
+                            float *alpha, float *a, Integer *lda, float *b, Integer *ldb);
 
-int
-    PLUMED_BLAS_F77_FUNC(isamax, ISAMAX) (int *n, float *dx, int *incx);
+Integer
+    PLUMED_BLAS_F77_FUNC(isamax, ISAMAX) (Integer *n, float *dx, Integer *incx);
 
 
 }
