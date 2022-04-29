@@ -22,9 +22,9 @@
 #ifndef __PLUMED_tools_Tensor_h
 #define __PLUMED_tools_Tensor_h
 #ifdef __PLUMED_HAS_ILP64
-#define Integer long
+typedef long Integer;
 #else
-#define Integer int
+typedef int Integer;
 #endif
 
 #include "MatrixSquareBracketsAccess.h"

@@ -92,9 +92,9 @@ Erik Lindahl, 2008-10-07.
 #define __PLUMED_BLAS_RETURNS_FLOAT float
 #endif
 #ifdef __PLUMED_HAS_ILP64
-#define Integer long
+typedef long Integer;
 #else
-#define Integer int
+typedef int Integer;
 #endif
 #if ! defined (__PLUMED_HAS_EXTERNAL_BLAS)
 #include "def_internal.h"
